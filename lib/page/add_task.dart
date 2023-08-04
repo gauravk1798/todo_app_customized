@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:todo_list/entity/Task.dart';
 import 'package:todo_list/main.dart';
 import 'package:todo_list/util/task_functions.dart';
+import 'package:todo_list/util/utils.dart';
 
 class AddTask extends StatefulWidget{
 
@@ -147,40 +148,18 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    /// The argument value will return the changed date as [DateTime] when the
-    /// widget [SfDateRangeSelectionMode] set as single.
-    ///
-    /// The argument value will return the changed dates as [List<DateTime>]
-    /// when the widget [SfDateRangeSelectionMode] set as multiple.
-    ///
-    /// The argument value will return the changed range as [PickerDateRange]
-    /// when the widget [SfDateRangeSelectionMode] set as range.
-    ///
-    /// The argument value will return the changed ranges as
-    /// [List<PickerDateRange] when the widget [SfDateRangeSelectionMode] set as
-    /// multi range.
-    setState(() {
-      if (args.value is PickerDateRange) {
-        _range = '${DateFormat('dd/MM/yyyy').format(args.value.startDate)} -'
-        // ignore: lines_longer_than_80_chars
-            ' ${DateFormat('dd/MM/yyyy').format(args.value.endDate ?? args.value.startDate)}';
-      } else if (args.value is DateTime) {
-        _selectedDate = args.value.toString();
-      } else if (args.value is List<DateTime>) {
-        _dateCount = args.value.length.toString();
-      } else {
-        _rangeCount = args.value.length.toString();
-      }
-    });
-  }
-
   Future<void> _openDatePickerDialog(BuildContext context) async {
     String? temp;
-    DateTimeRange selectedDateRange = DateTimeRange(
-      start: DateTime.now(),
-      end: DateTime.now().add(Duration(days: 7)),
-    );
+    DateTimeRange selectedDateRange;
+
+    if (_selectedDate=="") {
+      selectedDateRange = DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          );
+    }else{
+      selectedDateRange = DateTimeRange(start: Utils().parseDateTime(_selectedDate), end: Utils().parseDateTime(_selectedDate));
+    }
 
     await showDialog(
       context: context,
@@ -191,7 +170,8 @@ class _AddTaskState extends State<AddTask> {
             width:  MediaQuery.of(context).size.width * 0.90,
             child: SfDateRangePicker(
               selectionMode: DateRangePickerSelectionMode.single,
-              initialSelectedRange: PickerDateRange(selectedDateRange.start, selectedDateRange.end),
+              initialDisplayDate: DateTime.now(),
+              initialSelectedDate: _selectedDate!="" ? Utils().parseDateTime(_selectedDate) : null,
               onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
                 if (args.value is PickerDateRange) {
                   _range = '${DateFormat('dd/MM/yyyy').format(args.value.startDate)} -'
@@ -213,7 +193,9 @@ class _AddTaskState extends State<AddTask> {
               onPressed: () {
                 if(mounted){
                   setState(() {
-                    _selectedDate = temp??"";
+                    if (temp!=null && temp!="") {
+                      _selectedDate = temp!;
+                    }
                   });
                 }
                 print("$TAG._selectedDate=$_selectedDate");
