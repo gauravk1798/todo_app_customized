@@ -176,6 +176,7 @@ class _AddTaskState extends State<AddTask> {
   }
 
   Future<void> _openDatePickerDialog(BuildContext context) async {
+    String? temp;
     DateTimeRange selectedDateRange = DateTimeRange(
       start: DateTime.now(),
       end: DateTime.now().add(Duration(days: 7)),
@@ -189,18 +190,42 @@ class _AddTaskState extends State<AddTask> {
             height: MediaQuery.of(context).size.height * 0.90,
             width:  MediaQuery.of(context).size.width * 0.90,
             child: SfDateRangePicker(
+              selectionMode: DateRangePickerSelectionMode.single,
               initialSelectedRange: PickerDateRange(selectedDateRange.start, selectedDateRange.end),
               onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                selectedDateRange = args.value;
+                if (args.value is PickerDateRange) {
+                  _range = '${DateFormat('dd/MM/yyyy').format(args.value.startDate)} -'
+                  // ignore: lines_longer_than_80_chars
+                      ' ${DateFormat('dd/MM/yyyy').format(args.value.endDate ?? args.value.startDate)}';
+                } else if (args.value is DateTime) {
+                  var dateTimeFormat = DateFormat('dd/MM/yyyy').format(args.value);
+                  temp = dateTimeFormat;
+                } else if (args.value is List<DateTime>) {
+                  _dateCount = args.value.length.toString();
+                } else {
+                  _rangeCount = args.value.length.toString();
+                }
               },
             ),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                if(mounted){
+                  setState(() {
+                    _selectedDate = temp??"";
+                  });
+                }
+                print("$TAG._selectedDate=$_selectedDate");
                 Navigator.of(context).pop();
               },
-              child: Text('Close'),
+              child: Text('Select'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
             ),
           ],
         );
