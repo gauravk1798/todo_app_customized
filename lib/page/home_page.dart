@@ -17,9 +17,11 @@ class HomePage extends StatefulWidget{
 
 class _HomePageState extends State<HomePage>{
 
-  late List<dynamic> _elements = [];
+  late List<dynamic>? _elements = [];
 
   var _taskDetails;
+
+  bool _showNoElementsMessage=false;
 
   @override
   void initState() {
@@ -32,7 +34,7 @@ class _HomePageState extends State<HomePage>{
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
       appBar: AppBar(
-        title: const Text('ToDo'),
+        title: const Text('Home'),
       ),
       body: Center(
         child: Row(
@@ -40,8 +42,8 @@ class _HomePageState extends State<HomePage>{
             Expanded(flex: 7,child: FutureBuilder(future: _getAllTasks(),builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               print("$TAG.snapshot=${snapshot}");
               if (snapshot.hasData && snapshot.data!=null) {
-                return GroupedListView<dynamic, String>(
-                  elements: _elements,
+                return _elements!=null ? GroupedListView<dynamic, String>(
+                  elements: _elements!,
                   groupBy: (element) => element['date'],
                   groupComparator: (value1, value2) => value2.compareTo(value1),
                   itemComparator: (item1, item2) =>
@@ -65,7 +67,11 @@ class _HomePageState extends State<HomePage>{
                             })).then((value) {
                               if(mounted){
                                 setState(() {
-
+                                  if (_elements==null || _elements?.length==0) {
+                                    _showNoElementsMessage=true;
+                                  }else{
+                                    _showNoElementsMessage=false;
+                                  }
                                 });
                               }
                         });
@@ -89,10 +95,11 @@ class _HomePageState extends State<HomePage>{
                       ),
                     );
                   },
-                );
+                ) : Center();
               }
 
               return Center(child: SizedBox(height: 30,width: 30,child: CircularProgressIndicator()));
+
             },)),
             /*Expanded(flex: 3,child: _taskDetails!=null ? Column(
               children: [
@@ -148,13 +155,32 @@ class _HomePageState extends State<HomePage>{
         Navigator.of(context).push(
             new MaterialPageRoute(builder: (context) {
               return AddTask(viewMode: ViewMode.ADD);
-            }));
+            })).then((value) {
+          if(mounted){
+            setState(() {
+              if (_elements==null || _elements?.length==0) {
+                _showNoElementsMessage=true;
+              }else{
+                _showNoElementsMessage=false;
+              }
+            });
+          }
+        });
       },child: Icon(Icons.add,color: Theme.of(context).primaryColorLight),),
     );
   }
 
   Future<List<dynamic>?> _getAllTasks() async {
-    return _elements = await TaskFunctions().generateListGroupedByDate();
+    List<dynamic>? temp = await TaskFunctions().generateListGroupedByDate();
+    print('$TAG._getAllTasks.temp=$temp');
+    if (temp==null  || temp.length==0 || temp.isEmpty) {
+      _showNoElementsMessage=true;
+    }else{
+      _showNoElementsMessage=false;
+    }
+    print('$TAG._getAllTasks._showNoElementsMessage=$_showNoElementsMessage');
+    _elements = temp;
+    return _elements;
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/page/home_page.dart';
 
 class LoginApp extends StatelessWidget {
   @override
@@ -25,11 +26,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Page'),
+        title: Text('Login'),
       ),
       body: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.50,
-          height: MediaQuery.of(context).size.width * 0.35,
+        width: MediaQuery.of(context).size.width * 0.50,
+        height: MediaQuery.of(context).size.height * 0.90,
         child: Card(
           child: Padding(
             padding: EdgeInsets.all(16.0),
@@ -68,6 +69,10 @@ class _LoginPageState extends State<LoginPage> {
                     String email = _emailController.text;
                     String password = _passwordController.text;
                     print('Login with: Email=$email, Password=$password');
+                    Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) {
+                          return HomePage();
+                        }));
                   },
                   child: Text('Log In'),
                 ),

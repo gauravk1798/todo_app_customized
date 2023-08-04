@@ -22,13 +22,13 @@ class MyApp extends StatelessWidget {
       title: "ToDo App",
       theme: ThemeData(primaryColor: Color(0xFF615FF4),primaryColorDark: Color(0xFF78808B),primaryColorLight: Color(0xFFEDEDED)),
       // home: getHomePage(false),
-      home: HomePage(),
+      home: getHomePage(true),
     );
   }
 
   Widget getHomePage(bool enableSplashAnimation) {
     if (enableSplashAnimation) return new SplashPage();
-    return HomePage();
+    return LoginPage();
   }
 }
 
