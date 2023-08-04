@@ -63,6 +63,7 @@ class TaskFunctions{
           });
     }
 
+    print("$TAG.list=$list");
     return list;
   }
 }

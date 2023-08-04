@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: "ToDo App",
       theme: ThemeData(primaryColor: Color(0xFF615FF4),primaryColorDark: Color(0xFF78808B),primaryColorLight: Color(0xFFEDEDED)),
       // home: getHomePage(false),
-      home: AddTask(),
+      home: HomePage(),
     );
   }
 
