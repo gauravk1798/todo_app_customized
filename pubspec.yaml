@@ -34,7 +34,6 @@ dev_dependencies:
   image_crop:
   flutter_svg:
   package_info:
-  flutter_webview_plugin:
   pull_to_refresh:
   photo_view:
   open_file:
