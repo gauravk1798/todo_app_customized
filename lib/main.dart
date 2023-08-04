@@ -31,3 +31,9 @@ class MyApp extends StatelessWidget {
     return HomePage();
   }
 }
+
+enum ViewMode{
+ VIEW,
+ ADD,
+ UPDATE
+}

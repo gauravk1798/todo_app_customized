@@ -9,6 +9,11 @@ import 'package:todo_list/util/utils.dart';
 
 class AddTask extends StatefulWidget{
 
+  ViewMode viewMode;
+  Task? task;
+
+  AddTask({required this.viewMode,this.task});
+
   @override
   State<StatefulWidget> createState() {
     return _AddTaskState();
@@ -34,9 +39,21 @@ class _AddTaskState extends State<AddTask> {
   var _taskDescription;
 
   @override
+  void initState() {
+    _taskTitle=widget.task?.title;
+    _taskDescription=widget.task?.description;
+    _dropDownSelectedPriority=widget.task?.priority;
+    _selectedDate=widget.task?.date ?? '';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
+      appBar: AppBar(
+        title: const Text('Add New Task'),
+      ),
       body: Align(
         alignment: Alignment.center,
         child: SizedBox(
@@ -44,12 +61,13 @@ class _AddTaskState extends State<AddTask> {
           height: MediaQuery.of(context).size.height * 0.90,
           child: Card(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25,vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   TextFormField(
+                    readOnly: widget.viewMode==ViewMode.VIEW,
                     initialValue: _taskTitle,
                     decoration: InputDecoration(
                       hintText: 'Title',
@@ -60,7 +78,8 @@ class _AddTaskState extends State<AddTask> {
                     },
                   ),
                   TextFormField(
-                    initialValue: _taskDescription,
+                    readOnly: widget.viewMode==ViewMode.VIEW,
+                    initialValue: _taskDescription ?? '',
                     decoration: InputDecoration(
                       hintText: 'Description',
                       border: OutlineInputBorder(),
@@ -70,7 +89,7 @@ class _AddTaskState extends State<AddTask> {
                     },
                     maxLines: 10,
                   ),
-                  Row(
+                  widget.viewMode!=ViewMode.VIEW ? Row(
                     children: [
                       Expanded(child: Text('Priority',textAlign: TextAlign.center,),flex: 3),
                       Expanded(child: DropdownButtonFormField(
@@ -95,33 +114,42 @@ class _AddTaskState extends State<AddTask> {
                           }
                       ),flex: 7),
                     ],
+                  ) :
+                  TextFormField(
+                    readOnly: true,
+                    initialValue: _dropDownSelectedPriority ?? '',
+                    decoration: InputDecoration(
+                      hintText: 'Description',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                   SizedBox(
                     child: TextFormField(
                       readOnly: true,
                       controller: TextEditingController(text: _selectedDate.toString()), // Display selected date
-                      onTap: () {
+                      onTap: widget.viewMode!=ViewMode.VIEW ? () {
                         _openDatePickerDialog(context);
-                      },
+                      } : null,
                       decoration: InputDecoration(
                         hintText: 'Date',
                         border: OutlineInputBorder(),
                         suffixIcon: IconButton(
                           icon: Icon(Icons.calendar_today),
-                          onPressed: () {
+                          onPressed: widget.viewMode!=ViewMode.VIEW ? () {
                             _openDatePickerDialog(context);
-                          },
+                          } : null,
                         ),
                       ),
                     )
                   ),
-                  Row(
+                  widget.viewMode!=ViewMode.VIEW ? Row(
                     children: [
                       Expanded(child: ElevatedButton(
-                        onPressed: (){
-                          TaskFunctions().addTask(Task(title: _taskTitle,description: _taskDescription,priority: _dropDownSelectedPriority,date: _selectedDate)).then((value) {
+                        onPressed: () async {
+                          await TaskFunctions().addTask(Task(title: _taskTitle,description: _taskDescription,priority: _dropDownSelectedPriority,date: _selectedDate)).then((value) {
                             print("$TAG.value=${value}");
                           });
+                          Navigator.of(context).pop();
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
@@ -131,12 +159,36 @@ class _AddTaskState extends State<AddTask> {
                       SizedBox(width: 20),
                       Expanded(child: ElevatedButton(
                           style:ElevatedButton.styleFrom(foregroundColor: Colors.black,backgroundColor:Colors.white),
-                        onPressed: (){},
+                        onPressed: (){
+                            Navigator.of(context).pop();
+                        },
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
                           child: Text('Cancel'),
                         ),
                       )),
+                    ],
+                  ) : Stack(
+                    children: [
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                            child: Text('Close'),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(child: Text('Delete',style: TextStyle(color: Colors.red),),onPressed: () async {
+                          TaskFunctions().deleteTask(widget.task?.id)?.then((value) {
+                            Navigator.of(context).pop();
+                          });
+                        },),
+                      )
                     ],
                   )
                 ],

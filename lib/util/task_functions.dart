@@ -36,7 +36,8 @@ class TaskFunctions{
     return temp?.firstWhereOrNull((element) => element.id==taskId);
   }
 
-  Future<dynamic>? deleteTask(String taskId) async {
+  Future<dynamic>? deleteTask(String? taskId) async {
+    if(taskId==null)return;
     List<Task>? temp = await getTasks();
     temp?.removeWhere((element) => element.id==taskId);
     if (temp!=null) {
@@ -59,7 +60,7 @@ class TaskFunctions{
     List<dynamic> list= [];
     if (temp!=null && temp.isNotEmpty==true) {
       temp.forEach((task) {
-            list.add({'title':"${task.title}","date":"${task.date}"});
+            list.add({'id':"${task.id}",'title':"${task.title}","date":"${task.date}","description":"${task.description}","priority":"${task.priority}"});
           });
     }
 
