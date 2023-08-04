@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:todo_list/page/add_task.dart';
+import 'package:todo_list/page/home_page.dart';
 import 'package:todo_list/page/login.dart';
 import 'package:todo_list/page/splash_page.dart';
 const TAG="ToDo";
@@ -27,6 +28,6 @@ class MyApp extends StatelessWidget {
 
   Widget getHomePage(bool enableSplashAnimation) {
     if (enableSplashAnimation) return new SplashPage();
-    return LoginPage();
+    return HomePage();
   }
 }

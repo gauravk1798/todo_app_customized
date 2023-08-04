@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo_list/main.dart';
 import 'package:todo_list/util/keys.dart';
 
 class SharedUtil{
@@ -18,9 +19,10 @@ class SharedUtil{
   }
 
 
-  Future saveString (String key, String value) async{
+  Future<dynamic> saveString (String key, String value) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(key, value);
+    print("$TAG.saveString.prefs=${prefs}");
+    return await prefs.setString(key, value);
   }
 
   Future saveInt (String key, int value) async{
@@ -64,22 +66,23 @@ class SharedUtil{
   //-----------------------------------------------------get----------------------------------------------------
 
 
-  Future<String> getString (String key) async{
+  Future<String?>? getString (String key) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return Future.value(prefs.getString(key));
+    print("$TAG.getTasks.prefs=$prefs");
+    return Future.value(prefs.getString(key) ?? null);
   }
 
-  Future<int> getInt (String key) async{
+  Future<int?>? getInt (String key) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return Future.value(prefs.getInt(key));
   }
 
-  Future<double> getDouble (String key) async{
+  Future<double?>? getDouble (String key) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return Future.value(prefs.getDouble(key));
   }
 
-  Future<List<String>> getStringList(String key) async{
+  Future<List<String?>?>? getStringList(String key) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return Future.value(prefs.getStringList(key));
   }

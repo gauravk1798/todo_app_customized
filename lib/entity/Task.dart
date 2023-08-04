@@ -27,14 +27,15 @@ class Task{
     return map;
   }
 
-  static String encode(List<Task> tasks) => json.encode(
-    tasks
-        .map<Map<String, dynamic>>((task) => Task.toMap(task))
-        .toList(),
-  );
+  static String encode(List<Task> tasks) {
+    return json.encode(
+      tasks.map<Map<String, dynamic>>((task) => Task.toMap(task)).toList(),
+    );
+  }
 
-  static List<Task> decode(String tasks) =>
-      (json.decode(tasks) as List<dynamic>)
-          .map<Task>((item) => Task.fromJson(item))
-          .toList();
+  static List<Task> decode(String tasks) {
+    return (json.decode(tasks) as List<dynamic>)
+        .map<Task>((item) => Task.fromJson(item))
+        .toList();
+  }
 }

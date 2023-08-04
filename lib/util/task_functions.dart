@@ -9,29 +9,41 @@ class TaskFunctions{
 
 
   Future<dynamic> addTask(Task task) async {
-    String id ="${DateTime.timestamp().millisecond}";
+    String id ="${DateTime.timestamp().microsecondsSinceEpoch}";
     print("$TAG.id=${id}");
     task.id=id;
     print("$TAG.addTask=${Task.toMap(task)}");
-    List<Task> temp = await getTasks();
+    List<Task>? temp = await getTasks() ?? [];
+    print("$TAG.addTask=${temp}");
     temp.add(task);
+    print("$TAG.addTask=${temp.length}");
     return SharedUtil.instance.saveString("tasks", Task.encode(temp));
   }
 
-  Future<List<Task>> getTasks() async {
-    final String taskString = await SharedUtil.instance.getString('tasks');
-    return Task.decode(taskString);
+  Future<List<Task>?>? getTasks() async {
+    print("$TAG.getTasks.START");
+    final String? taskString = await SharedUtil.instance.getString('tasks');
+    print("$TAG.getTasks.taskString=$taskString");
+    if (taskString!=null) {
+      return Task.decode(taskString);
+    }else{
+      return null;
+    }
   }
 
-  Future<Task?> getTaskById(String taskId) async {
-    List<Task> temp = await getTasks();
-    return temp.firstWhereOrNull((element) => element.id==taskId);
+  Future<Task?>? getTaskById(String taskId) async {
+    List<Task>? temp = await getTasks();
+    return temp?.firstWhereOrNull((element) => element.id==taskId);
   }
 
-  Future<dynamic> deleteTask(String taskId) async {
-    List<Task> temp = await getTasks();
-    temp.removeWhere((element) => element.id==taskId);
-    return SharedUtil.instance.saveString("tasks", Task.encode(temp));
+  Future<dynamic>? deleteTask(String taskId) async {
+    List<Task>? temp = await getTasks();
+    temp?.removeWhere((element) => element.id==taskId);
+    if (temp!=null) {
+      return SharedUtil.instance.saveString("tasks", Task.encode(temp));
+    }
+
+    return null;
   }
 
   Future<dynamic> updateTask(Task task) async {
@@ -39,5 +51,18 @@ class TaskFunctions{
     deleteTask(task.id!);
     temp = Task.fromJson(Task.toMap(task));
     return addTask(temp);
+  }
+
+  Future<dynamic> generateListGroupedByDate() async {
+    List<Task>? temp = await getTasks();
+
+    List<dynamic> list= [];
+    if (temp!=null && temp.isNotEmpty==true) {
+      temp.forEach((task) {
+            list.add({'title':"${task.title}","date":"${task.date}"});
+          });
+    }
+
+    return list;
   }
 }
