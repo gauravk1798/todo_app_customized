@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:provider/provider.dart';
+import 'package:todo_list/home/home_page.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -24,6 +24,6 @@ class SplashPage extends StatelessWidget {
   }
 
   Widget getHomePage(){
-    return Container();
+    return HomePage();
   }
 }

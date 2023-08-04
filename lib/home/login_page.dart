@@ -2,8 +2,6 @@ import 'dart:ui';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:provider/provider.dart';
-import 'package:todo_list/i10n/localization_intl.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -21,7 +19,7 @@ class LoginPage extends StatelessWidget {
         children: <Widget>[
           FlareActor(
             "flrs/login_bg.flr",
-            animation: "rotate",
+            animation: "move",
             fit: BoxFit.cover,
             callback: (animation) {
 
