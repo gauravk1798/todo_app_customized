@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:todo_list/home/home_page.dart';
+import 'package:todo_list/page/home_page.dart';
 
 class SplashPage extends StatelessWidget {
   @override

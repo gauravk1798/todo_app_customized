@@ -15,15 +15,17 @@ dependencies:
     sdk: flutter
   cupertino_icons:
   url_launcher:
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
   intl:
   dio:
   shared_preferences:
   grouped_list:
   flare_flutter:
+  collection:
+  syncfusion_flutter_datepicker:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
 
 # The following section is specific to Flutter.
 flutter:

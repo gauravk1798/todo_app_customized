@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:todo_list/home/home_page.dart';
-import 'package:todo_list/home/login_page.dart';
-import 'package:todo_list/home/splash_page.dart';
+import 'package:todo_list/page/add_task.dart';
+import 'package:todo_list/page/login.dart';
+import 'package:todo_list/page/splash_page.dart';
+const TAG="ToDo";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "ToDo App",
-      home: getHomePage(true),
+      theme: ThemeData(primaryColor: Color(0xFF615FF4),primaryColorDark: Color(0xFF78808B),primaryColorLight: Color(0xFFEDEDED)),
+      // home: getHomePage(false),
+      home: AddTask(),
     );
   }
 
