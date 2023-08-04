@@ -22,7 +22,7 @@ dev_dependencies:
   intl:
   dio:
   shared_preferences:
-  simple_grouped_listview: ^2.0.0
+  grouped_list:
   flare_flutter:
 
 # The following section is specific to Flutter.
@@ -31,6 +31,7 @@ flutter:
   assets:
     - images/
     - images/weather/
+    - local_json/
     - svgs/
     - flrs/
 
