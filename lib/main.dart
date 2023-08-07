@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
 
   Widget getHomePage(bool enableSplashAnimation) {
     if (enableSplashAnimation) return new SplashPage();
-    return LoginPage();
+    return HomePage();
   }
 }
 

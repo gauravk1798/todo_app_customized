@@ -41,8 +41,8 @@ class _HomePageState extends State<HomePage>{
           children: [
             Expanded(flex: 7,child: FutureBuilder(future: _getAllTasks(),builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               print("$TAG.snapshot=${snapshot}");
-              if (snapshot.hasData && snapshot.data!=null) {
-                return _elements!=null ? GroupedListView<dynamic, String>(
+              if (snapshot.hasData && snapshot.data!=null && _elements!=null && _elements!.length>0) {
+                return GroupedListView<dynamic, String>(
                   elements: _elements!,
                   groupBy: (element) => element['date'],
                   groupComparator: (value1, value2) => value2.compareTo(value1),
@@ -95,59 +95,21 @@ class _HomePageState extends State<HomePage>{
                       ),
                     );
                   },
-                ) : Center();
+                );
+              }else{
+                return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Your ToDo list is empty.',style: TextStyle(fontSize: 20,color: Theme.of(context).primaryColorDark)),
+                      ],
+                    )
+                );
               }
 
               return Center(child: SizedBox(height: 30,width: 30,child: CircularProgressIndicator()));
 
             },)),
-            /*Expanded(flex: 3,child: _taskDetails!=null ? Column(
-              children: [
-                Expanded(child: Center()),
-                Expanded(child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(child: Text(
-                          '${_taskDetails?['title']}',
-                          textAlign: TextAlign.left,
-                          maxLines: 5,
-                          style: TextStyle(
-                            fontSize: 50,
-                            fontWeight: FontWeight.bold,
-                            foreground: Paint()
-                              ..shader = LinearGradient(
-                                colors: [Colors.blue, Colors.green],
-                              ).createShader(Rect.fromLTWH(0, 0, 200, 70)),
-                          ),
-                        ))
-                      ],
-                    ),
-                    Text(
-                      '${_taskDetails?['description']}',
-                      textAlign: TextAlign.left,
-                      maxLines: 20,
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      '${_taskDetails?['priority']}',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                )),
-                Expanded(child: Center()),
-              ],
-            ) : Center())*/
           ],
         ),
       ),

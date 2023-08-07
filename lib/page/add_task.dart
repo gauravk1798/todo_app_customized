@@ -52,7 +52,7 @@ class _AddTaskState extends State<AddTask> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
       appBar: AppBar(
-        title: const Text('Add New Task'),
+        title: Text("${widget.viewMode==ViewMode.ADD ? 'Add New Task' : 'View Task'}"),
       ),
       body: Align(
         alignment: Alignment.center,
@@ -153,7 +153,7 @@ class _AddTaskState extends State<AddTask> {
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
-                          child: Text('Add Task'),
+                          child: Text('Save'),
                         ),
                       )),
                       SizedBox(width: 20),
